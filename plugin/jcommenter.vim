@@ -699,6 +699,7 @@ function! s:WriteMethodComments()
     if exists("b:jcommenter_move_cursor") && b:jcommenter_move_cursor && s:firstUpdatedTagLine != -1
       exe "normal " . s:firstUpdatedTagLine . "G$"
       if exists("b:jcommenter_autostart_insert_mode") && b:jcommenter_autostart_insert_mode
+        call setline(line('.'), getline('.') . ' ')
         startinsert!
       endif
     endif
@@ -711,7 +712,7 @@ function! s:WriteMethodComments()
     let descriptionSpace = s:defaultMethodDescriptionSpace
   endif
   
-  call s:AppendStr('/** ')
+  call s:AppendStr('/**')
 
   let param = s:GetNextParameterName()
   let exception = s:GetNextThrowName()
@@ -863,11 +864,12 @@ function! s:WriteFieldComments()
     if exists("b:jcommenter_move_cursor")
       normal k$hh
       if exists("b:jcommenter_autostart_insert_mode")
-        startinsert
+        call setline(line('.'), getline('.') . ' ')
+        startinsert!
       endif
     endif
   else
-    call s:AppendStr('/** ')
+    call s:AppendStr('/**')
     call s:AppendStars(descriptionSpace)
     call s:AppendStr(' */')
     call s:MoveCursor()
@@ -886,7 +888,7 @@ function! s:WriteClassComments()
 
   let s:appendPos = s:rangeStart - 1
 
-  call s:AppendStr('/** ')
+  call s:AppendStr('/**')
 
   call s:AppendStars(descriptionSpace)
 
@@ -1157,7 +1159,7 @@ endfunction
 function! s:AppendStars(amount)
   let i = a:amount
   while i > 0
-    call s:AppendStr(' * ')
+    call s:AppendStr(' *')
     let i = i - 1
   endwhile
 endfunction
@@ -1181,7 +1183,8 @@ function! s:MoveCursor()
     call s:MoveCursorToEOL(s:rangeStart + 1)
   endif
   if startInsert
-    startinsert
+    call setline(line('.'), getline('.') . ' ')
+    startinsert!
   endif
 endfunction
 
